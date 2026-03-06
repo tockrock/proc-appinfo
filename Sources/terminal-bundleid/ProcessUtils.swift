@@ -16,11 +16,12 @@ enum CLIError: LocalizedError {
 /// - Parameter pid: The process ID to query.
 /// - Returns: The parent PID, or `nil` if the process doesn't exist or has no parent.
 func parentPID(of pid: pid_t) -> pid_t? {
-    var info = proc_bsdinfo()
-    let size = Int32(MemoryLayout<proc_bsdinfo>.size)
-    guard proc_pidinfo(pid, PROC_PIDTBSDINFO, 0, &info, size) > 0 else { return nil }
-    let ppid = info.pbi_ppid
-    return ppid > 0 ? pid_t(ppid) : nil
+    var mib: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, pid]
+    var info = kinfo_proc()
+    var size = MemoryLayout<kinfo_proc>.size
+    guard sysctl(&mib, 4, &info, &size, nil, 0) == 0, size > 0 else { return nil }
+    let ppid = info.kp_eproc.e_ppid
+    return ppid > 0 ? ppid : nil
 }
 
 /// Walks the process ancestry tree and returns the bundle ID of the first
