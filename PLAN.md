@@ -7,14 +7,10 @@ app you are currently running it from.
 
 ## Approach
 
-1. **Read `TERM_PROGRAM`** via `apple/swift-configuration`
-   (`EnvironmentVariablesProvider`, key `"term.program"` → env `TERM_PROGRAM`).
-   Used in `--verbose` output.
-
-2. **Walk the process ancestry tree** using Darwin's `sysctl` with
+1. **Walk the process ancestry tree** using Darwin's `sysctl` with
    `KERN_PROC_PID` to traverse from the current process upward.
 
-3. **Resolve the bundle ID** by checking each ancestor PID against
+2. **Resolve the bundle ID** by checking each ancestor PID against
    `NSRunningApplication(processIdentifier:)` — the first match is the
    terminal app.
 
@@ -35,17 +31,15 @@ terminal-bundleid/
 | Package | URL | Version |
 |---------|-----|---------|
 | swift-argument-parser | https://github.com/apple/swift-argument-parser | ≥ 1.3.0 |
-| swift-configuration   | https://github.com/apple/swift-configuration   | ≥ 1.0.0 |
 
 Platform: **macOS 15+**
 
 ## CLI Interface
 
 ```
-USAGE: terminal-bundleid [--verbose]
+USAGE: terminal-bundleid
 
 OPTIONS:
-  -v, --verbose   Also print the TERM_PROGRAM environment variable.
   -h, --help      Show help information.
 ```
 
@@ -53,10 +47,6 @@ OPTIONS:
 
 ```bash
 $ terminal-bundleid
-com.mitchellh.ghostty
-
-$ terminal-bundleid --verbose
-TERM_PROGRAM: ghostty
 com.mitchellh.ghostty
 ```
 
@@ -87,7 +77,6 @@ throw CLIError.terminalNotFound
 ```bash
 swift build
 swift run terminal-bundleid
-swift run terminal-bundleid --verbose
 
 # Release install
 swift build -c release
