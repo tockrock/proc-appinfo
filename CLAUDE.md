@@ -18,6 +18,11 @@ swift run terminal-bundleid
 swift test
 ```
 
+## Documentation
+
+- `doc/plan.md` — original implementation plan and design decisions
+- `doc/adr-sysctl-vs-proc_pidinfo.md` — why `sysctl` was chosen over `proc_pidinfo`
+
 ## Architecture
 
 `terminal-bundleid` is a single-target Swift Package (macOS 13+) CLI tool with two source files:
