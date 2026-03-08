@@ -9,14 +9,21 @@ com.apple.Terminal
 
 ## How it works
 
-`terminal-bundleid` dynamically walks the process ancestry tree using `proc_pidinfo`. Starting from its own parent process, it checks each ancestor against `NSRunningApplication` until it finds the first registered app bundle — which is the terminal.
+`terminal-bundleid` dynamically walks the process ancestry tree using `sysctl`. Starting from its own parent process, it checks each ancestor against `NSRunningApplication` until it finds the first registered app bundle — which is the terminal.
 
 ## Installation
+
+### Homebrew
+
+```bash
+brew tap tockrock/terminal-bundleid
+brew install terminal-bundleid
+```
 
 ### Build from source
 
 ```bash
-git clone https://github.com/terminal-bundleid/terminal-bundleid
+git clone https://github.com/tockrock/terminal-bundleid
 cd terminal-bundleid
 swift build -c release
 cp .build/release/terminal-bundleid /usr/local/bin/
