@@ -27,3 +27,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: terminal-bundleid.tar.gz
+
+      - name: Update Homebrew formula
+        uses: mislav/bump-homebrew-formula-action@v3
+        with:
+          formula-name: terminal-bundleid
+          tap-repo: tockrock/homebrew-terminal-bundleid
+          download-url: https://github.com/tockrock/terminal-bundleid/releases/download/${{ github.ref_name }}/terminal-bundleid.tar.gz
+        env:
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
