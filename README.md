@@ -16,8 +16,8 @@ com.apple.Terminal
 ### Homebrew
 
 ```bash
-brew tap tockrock/terminal-bundleid
-brew install terminal-bundleid
+brew tap tockrock/tap
+brew install tockrock/tap/terminal-bundleid
 ```
 
 ### Build from source
