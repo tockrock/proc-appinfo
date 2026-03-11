@@ -27,10 +27,3 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: terminal-bundleid.tar.gz
-
-      - name: Update Homebrew formula
-        uses: Homebrew/actions/bump-packages@main
-        with:
-          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
-          formulae: tockrock/homebrew-tap/terminal-bundleid
-          fork: false
