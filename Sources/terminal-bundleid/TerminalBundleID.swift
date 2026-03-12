@@ -10,8 +10,11 @@ struct TerminalBundleID: ParsableCommand {
         abstract: "Returns the macOS bundle ID of the current terminal app."
     )
 
+    @Option(name: .long, help: "Walk ancestors of this PID instead of the current process.")
+    var pid: Int32?
+
     mutating func run() throws {
-        let bundleID = try findTerminalBundleID()
+        let bundleID = try findTerminalBundleID(startingFrom: pid)
         print(bundleID)
     }
 }

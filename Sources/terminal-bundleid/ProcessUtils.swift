@@ -29,8 +29,8 @@ func parentPID(of pid: pid_t) -> pid_t? {
 ///
 /// - Throws: ``CLIError/terminalNotFound`` if no app bundle is found before reaching PID 1.
 /// - Returns: The bundle identifier string (e.g. `com.apple.Terminal`).
-func findTerminalBundleID() throws -> String {
-    var pid = getppid()
+func findTerminalBundleID(startingFrom startPID: pid_t? = nil) throws -> String {
+    var pid = startPID ?? getppid()
     while pid > 1 {
         if let app = NSRunningApplication(processIdentifier: pid),
            let bundleID = app.bundleIdentifier {
