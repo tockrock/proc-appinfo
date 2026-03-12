@@ -1,5 +1,5 @@
 import ArgumentParser
-import AppKit
+import TerminalBundleID
 
 /// The root command. Resolves the bundle ID of the terminal app that
 /// launched this process and prints it to stdout.

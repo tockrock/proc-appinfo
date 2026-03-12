@@ -2,20 +2,20 @@ import Darwin
 import AppKit
 
 /// Errors thrown during terminal bundle ID resolution.
-enum CLIError: LocalizedError {
+public enum CLIError: LocalizedError {
     /// No app bundle was found in the process ancestry chain.
     case terminalNotFound
 
-    var errorDescription: String? {
+    public var errorDescription: String? {
         "Could not determine the terminal app's bundle ID."
     }
 }
 
-/// Returns the parent PID of the given process using `proc_pidinfo`.
+/// Returns the parent PID of the given process using `sysctl`.
 ///
 /// - Parameter pid: The process ID to query.
 /// - Returns: The parent PID, or `nil` if the process doesn't exist or has no parent.
-func parentPID(of pid: pid_t) -> pid_t? {
+public func parentPID(of pid: pid_t) -> pid_t? {
     var mib: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, pid]
     var info = kinfo_proc()
     var size = MemoryLayout<kinfo_proc>.size
@@ -27,16 +27,23 @@ func parentPID(of pid: pid_t) -> pid_t? {
 /// Walks the process ancestry tree and returns the bundle ID of the first
 /// ancestor that is a registered macOS app bundle.
 ///
+/// - Parameters:
+///   - startPID: The PID to start from. Defaults to `getppid()`.
+///   - parentOf: Returns the parent PID for a given PID. Defaults to the real `sysctl` lookup.
+///   - bundleIDFor: Returns the bundle ID for a given PID, or `nil` if it isn't a registered app.
 /// - Throws: ``CLIError/terminalNotFound`` if no app bundle is found before reaching PID 1.
 /// - Returns: The bundle identifier string (e.g. `com.apple.Terminal`).
-func findTerminalBundleID(startingFrom startPID: pid_t? = nil) throws -> String {
+public func findTerminalBundleID(
+    startingFrom startPID: pid_t? = nil,
+    parentOf: (pid_t) -> pid_t? = { parentPID(of: $0) },
+    bundleIDFor: (pid_t) -> String? = { NSRunningApplication(processIdentifier: $0)?.bundleIdentifier }
+) throws -> String {
     var pid = startPID ?? getppid()
     while pid > 1 {
-        if let app = NSRunningApplication(processIdentifier: pid),
-           let bundleID = app.bundleIdentifier {
+        if let bundleID = bundleIDFor(pid) {
             return bundleID
         }
-        guard let parent = parentPID(of: pid), parent != pid else { break }
+        guard let parent = parentOf(pid), parent != pid else { break }
         pid = parent
     }
     throw CLIError.terminalNotFound
