@@ -24,6 +24,6 @@ jobs:
             terminal-bundleid
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: terminal-bundleid.tar.gz
+        run: gh release create "$GITHUB_REF_NAME" terminal-bundleid.tar.gz --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
