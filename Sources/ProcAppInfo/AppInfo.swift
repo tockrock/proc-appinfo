@@ -13,14 +13,6 @@ public struct AppInfo: Equatable, Codable {
     public let hidden: Bool
     public let finishedLaunching: Bool
     public let ownsMenuBar: Bool
-    public let activationPolicy: ActivationPolicy
-    public let architecture: Architecture
-
-    public enum ActivationPolicy: String, Codable, Equatable {
-        case regular, accessory, prohibited
-    }
-
-    public enum Architecture: String, Codable, Equatable {
-        case arm64, x86_64, unknown
-    }
+    public let activationPolicy: Int
+    public let architecture: Int
 }

@@ -1,23 +1,35 @@
-# terminal-bundleid
+# proc-appinfo
 
-A macOS CLI tool that returns the bundle ID of the terminal app you are currently running it from.
+A macOS CLI tool that returns information about the first ancestor macOS app in the current process tree — typically the terminal or app that launched the process.
 
-```bash
-$ terminal-bundleid
-com.apple.Terminal
+```
+$ proc-appinfo
+Name:                Terminal
+Bundle ID:           com.apple.Terminal
+PID:                 812
+Bundle Path:         /System/Applications/Utilities/Terminal.app
+Executable Path:     /System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
+Version:             2.15
+Architecture:        arm64
+Launch Date:         2026-04-12T01:34:41Z
+Active:              true
+Hidden:              false
+Finished Launching:  true
+Owns Menu Bar:       true
+Activation Policy:   regular
 ```
 
 ## How it works
 
-`terminal-bundleid` dynamically walks the process ancestry tree using `sysctl`. Starting from its own parent process, it checks each ancestor against `NSRunningApplication` until it finds the first registered app bundle — which is the terminal.
+`proc-appinfo` walks the process ancestry tree using `sysctl`. Starting from its own parent process, it checks each ancestor against `NSRunningApplication` until it finds the first registered app bundle.
 
 ## Installation
 
 ### Homebrew
 
 ```bash
-brew tap tockrock/terminal-bundleid
-brew install terminal-bundleid
+brew tap tockrock/tap
+brew install tockrock/tap/proc-appinfo
 ```
 
 ### Build from source
@@ -26,22 +38,41 @@ brew install terminal-bundleid
 git clone https://github.com/tockrock/terminal-bundleid
 cd terminal-bundleid
 swift build -c release
-cp .build/release/terminal-bundleid /usr/local/bin/
+cp .build/release/proc-appinfo /usr/local/bin/
 ```
 
 ## Usage
 
 ```bash
-terminal-bundleid
-```
+# All fields, human-readable
+proc-appinfo
 
-Prints the bundle ID of the current terminal app to stdout and exits. Non-zero exit code on failure.
+# Single field (for scripting)
+proc-appinfo --bundle-id
+proc-appinfo --name
+proc-appinfo --pid
+proc-appinfo --version
+proc-appinfo --bundle-path
+proc-appinfo --executable-path
+proc-appinfo --launch-date
+proc-appinfo --active
+proc-appinfo --hidden
+proc-appinfo --finished-launching
+proc-appinfo --owns-menu-bar
+proc-appinfo --activation-policy
+proc-appinfo --architecture
+
+# All fields as JSON
+proc-appinfo --json
+
+# Walk ancestors of a specific PID
+proc-appinfo --from-pid 1234
+```
 
 ### Scripting
 
-The output is plain stdout, making it easy to compose with other tools:
+Single-field flags print a plain value to stdout with no extra formatting:
 
 ```bash
-BUNDLE_ID=$(terminal-bundleid)
-defaults read "$BUNDLE_ID" AppleLanguages
+open -b "$(proc-appinfo --bundle-id)"
 ```
