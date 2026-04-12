@@ -6,14 +6,14 @@ A macOS CLI tool that returns information about the first ancestor macOS app in 
 $ proc-appinfo
 Bundle Name:          Terminal
 Bundle Display Name:  Terminal
-Localized Name:       Terminal
+Localized Name:       ターミナル
 Bundle ID:            com.apple.Terminal
 PID:                  812
 Bundle Path:          /System/Applications/Utilities/Terminal.app
 Executable Path:      /System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
 Version:              2.15
-Build Version:        447
-Architecture:         arm64
+Build Version:        470
+Architecture:         16777228
 Launch Date:          2026-04-12T01:34:41Z
 Active:               true
 Hidden:               false
