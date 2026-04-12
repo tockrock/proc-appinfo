@@ -14,12 +14,14 @@ struct AppInfoCLI: ParsableCommand {
 
     // Single-field selection flags (sw_vers style — mutually exclusive)
     @Flag(help: "Print the bundle name (CFBundleName).") var bundleName: Bool = false
+    @Flag(help: "Print the bundle display name (CFBundleDisplayName).") var bundleDisplayName: Bool = false
     @Flag(help: "Print the localized app name.") var localizedName: Bool = false
     @Flag(help: "Print the bundle identifier.") var bundleId: Bool = false
     @Flag(help: "Print the process ID.") var pid: Bool = false
     @Flag(help: "Print the bundle path.") var bundlePath: Bool = false
     @Flag(help: "Print the executable path.") var executablePath: Bool = false
     @Flag(help: "Print the version.") var version: Bool = false
+    @Flag(help: "Print the build version (CFBundleVersion).") var buildVersion: Bool = false
     @Flag(help: "Print the launch date (ISO 8601).") var launchDate: Bool = false
     @Flag(help: "Print whether the app is active.") var active: Bool = false
     @Flag(help: "Print whether the app is hidden.") var hidden: Bool = false
@@ -31,8 +33,8 @@ struct AppInfoCLI: ParsableCommand {
     @Flag(help: "Output all fields as a JSON object.") var json: Bool = false
 
     private var selectedFields: [Bool] {
-        [bundleName, localizedName, bundleId, pid, bundlePath, executablePath, version, launchDate,
-         active, hidden, finishedLaunching, ownsMenuBar, activationPolicy, architecture]
+        [bundleName, bundleDisplayName, localizedName, bundleId, pid, bundlePath, executablePath, version, buildVersion,
+         launchDate, active, hidden, finishedLaunching, ownsMenuBar, activationPolicy, architecture]
     }
 
     mutating func validate() throws {
@@ -53,12 +55,14 @@ struct AppInfoCLI: ParsableCommand {
     private func output(_ appInfo: AppInfo) -> String {
         if json              { return jsonOutput(appInfo) }
         if bundleName        { return appInfo.bundleName ?? "" }
+        if bundleDisplayName { return appInfo.bundleDisplayName ?? "" }
         if localizedName     { return appInfo.localizedName ?? "" }
         if bundleId          { return appInfo.bundleId ?? "" }
         if pid               { return String(appInfo.pid) }
         if bundlePath        { return appInfo.bundlePath ?? "" }
         if executablePath    { return appInfo.executablePath ?? "" }
         if version           { return appInfo.version ?? "" }
+        if buildVersion      { return appInfo.buildVersion ?? "" }
         if launchDate        { return appInfo.launchDate.map { ISO8601DateFormatter().string(from: $0) } ?? "" }
         if active            { return String(appInfo.active) }
         if hidden            { return String(appInfo.hidden) }
@@ -75,12 +79,14 @@ struct AppInfoCLI: ParsableCommand {
 private func humanOutput(_ info: AppInfo) -> String {
     var lines: [(String, String)] = []
     lines.append(("Bundle Name:", info.bundleName ?? ""))
+    lines.append(("Bundle Display Name:", info.bundleDisplayName ?? ""))
     lines.append(("Localized Name:", info.localizedName ?? ""))
     lines.append(("Bundle ID:", info.bundleId ?? ""))
     lines.append(("PID:", String(info.pid)))
     lines.append(("Bundle Path:", info.bundlePath ?? ""))
     lines.append(("Executable Path:", info.executablePath ?? ""))
     lines.append(("Version:", info.version ?? ""))
+    lines.append(("Build Version:", info.buildVersion ?? ""))
     lines.append(("Architecture:", String(info.architecture)))
     lines.append(("Launch Date:", info.launchDate.map { ISO8601DateFormatter().string(from: $0) } ?? ""))
     lines.append(("Active:", String(info.active)))

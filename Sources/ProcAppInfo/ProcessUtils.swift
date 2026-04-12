@@ -58,16 +58,20 @@ func makeAppInfo(pid: pid_t) -> AppInfo? {
     let bundleURL = app.bundleURL
     let bundle = bundleURL.flatMap { Bundle(url: $0) }
     let version = bundle?.infoDictionary?["CFBundleShortVersionString"] as? String
+    let buildVersion = bundle?.infoDictionary?["CFBundleVersion"] as? String
     let bundleName = bundle?.infoDictionary?["CFBundleName"] as? String
+    let bundleDisplayName = bundle?.infoDictionary?["CFBundleDisplayName"] as? String
 
     return AppInfo(
         bundleName: bundleName,
+        bundleDisplayName: bundleDisplayName,
         localizedName: app.localizedName,
         bundleId: app.bundleIdentifier,
         pid: pid,
         bundlePath: bundleURL?.path,
         executablePath: app.executableURL?.path,
         version: version,
+        buildVersion: buildVersion,
         launchDate: app.launchDate,
         active: app.isActive,
         hidden: app.isHidden,
