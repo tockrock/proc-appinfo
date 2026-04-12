@@ -72,14 +72,14 @@ struct AppInfoCLI: ParsableCommand {
 
 private func humanOutput(_ info: AppInfo) -> String {
     var lines: [(String, String)] = []
-    if let v = info.name            { lines.append(("Name:", v)) }
-    if let v = info.bundleId        { lines.append(("Bundle ID:", v)) }
+    lines.append(("Name:", info.name ?? ""))
+    lines.append(("Bundle ID:", info.bundleId ?? ""))
     lines.append(("PID:", String(info.pid)))
-    if let v = info.bundlePath      { lines.append(("Bundle Path:", v)) }
-    if let v = info.executablePath  { lines.append(("Executable Path:", v)) }
-    if let v = info.version         { lines.append(("Version:", v)) }
+    lines.append(("Bundle Path:", info.bundlePath ?? ""))
+    lines.append(("Executable Path:", info.executablePath ?? ""))
+    lines.append(("Version:", info.version ?? ""))
     lines.append(("Architecture:", String(info.architecture)))
-    if let v = info.launchDate      { lines.append(("Launch Date:", ISO8601DateFormatter().string(from: v))) }
+    lines.append(("Launch Date:", info.launchDate.map { ISO8601DateFormatter().string(from: $0) } ?? ""))
     lines.append(("Active:", String(info.active)))
     lines.append(("Hidden:", String(info.hidden)))
     lines.append(("Finished Launching:", String(info.finishedLaunching)))
