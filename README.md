@@ -4,7 +4,8 @@ A macOS CLI tool that returns information about the first ancestor macOS app in 
 
 ```
 $ proc-appinfo
-Name:                Terminal
+Bundle Name:         Terminal
+Localized Name:      Terminal
 Bundle ID:           com.apple.Terminal
 PID:                 812
 Bundle Path:         /System/Applications/Utilities/Terminal.app
@@ -48,8 +49,9 @@ cp .build/release/proc-appinfo /usr/local/bin/
 proc-appinfo
 
 # Single field (for scripting)
+proc-appinfo --bundle-name
+proc-appinfo --localized-name
 proc-appinfo --bundle-id
-proc-appinfo --name
 proc-appinfo --pid
 proc-appinfo --version
 proc-appinfo --bundle-path

@@ -2,7 +2,8 @@ import Foundation
 
 /// Information about a running macOS application, sourced from NSRunningApplication.
 public struct AppInfo: Equatable, Codable {
-    public let name: String?
+    public let bundleName: String?
+    public let localizedName: String?
     public let bundleId: String?
     public let pid: Int32
     public let bundlePath: String?

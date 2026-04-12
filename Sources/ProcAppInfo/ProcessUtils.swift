@@ -56,12 +56,13 @@ func makeAppInfo(pid: pid_t) -> AppInfo? {
     guard let app = NSRunningApplication(processIdentifier: pid) else { return nil }
 
     let bundleURL = app.bundleURL
-    let version = bundleURL.flatMap {
-        Bundle(url: $0)?.infoDictionary?["CFBundleShortVersionString"] as? String
-    }
+    let bundle = bundleURL.flatMap { Bundle(url: $0) }
+    let version = bundle?.infoDictionary?["CFBundleShortVersionString"] as? String
+    let bundleName = bundle?.infoDictionary?["CFBundleName"] as? String
 
     return AppInfo(
-        name: app.localizedName,
+        bundleName: bundleName,
+        localizedName: app.localizedName,
         bundleId: app.bundleIdentifier,
         pid: pid,
         bundlePath: bundleURL?.path,

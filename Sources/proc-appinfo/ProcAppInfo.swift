@@ -13,7 +13,8 @@ struct AppInfoCLI: ParsableCommand {
     var fromPid: Int32?
 
     // Single-field selection flags (sw_vers style — mutually exclusive)
-    @Flag(help: "Print the app name.") var name: Bool = false
+    @Flag(help: "Print the bundle name (CFBundleName).") var bundleName: Bool = false
+    @Flag(help: "Print the localized app name.") var localizedName: Bool = false
     @Flag(help: "Print the bundle identifier.") var bundleId: Bool = false
     @Flag(help: "Print the process ID.") var pid: Bool = false
     @Flag(help: "Print the bundle path.") var bundlePath: Bool = false
@@ -30,7 +31,7 @@ struct AppInfoCLI: ParsableCommand {
     @Flag(help: "Output all fields as a JSON object.") var json: Bool = false
 
     private var selectedFields: [Bool] {
-        [name, bundleId, pid, bundlePath, executablePath, version, launchDate,
+        [bundleName, localizedName, bundleId, pid, bundlePath, executablePath, version, launchDate,
          active, hidden, finishedLaunching, ownsMenuBar, activationPolicy, architecture]
     }
 
@@ -51,7 +52,8 @@ struct AppInfoCLI: ParsableCommand {
 
     private func output(_ appInfo: AppInfo) -> String {
         if json              { return jsonOutput(appInfo) }
-        if name              { return appInfo.name ?? "" }
+        if bundleName        { return appInfo.bundleName ?? "" }
+        if localizedName     { return appInfo.localizedName ?? "" }
         if bundleId          { return appInfo.bundleId ?? "" }
         if pid               { return String(appInfo.pid) }
         if bundlePath        { return appInfo.bundlePath ?? "" }
@@ -72,7 +74,8 @@ struct AppInfoCLI: ParsableCommand {
 
 private func humanOutput(_ info: AppInfo) -> String {
     var lines: [(String, String)] = []
-    lines.append(("Name:", info.name ?? ""))
+    lines.append(("Bundle Name:", info.bundleName ?? ""))
+    lines.append(("Localized Name:", info.localizedName ?? ""))
     lines.append(("Bundle ID:", info.bundleId ?? ""))
     lines.append(("PID:", String(info.pid)))
     lines.append(("Bundle Path:", info.bundlePath ?? ""))
