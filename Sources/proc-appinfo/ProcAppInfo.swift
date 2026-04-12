@@ -45,23 +45,26 @@ struct AppInfoCLI: ParsableCommand {
     }
 
     mutating func run() throws {
-        let info = try findAppInfo(startingFrom: fromPid)
-        if json {
-            print(jsonOutput(info))
-        } else if name              { print(info.name ?? "") }
-        else if bundleId            { print(info.bundleId ?? "") }
-        else if pid                 { print(info.pid) }
-        else if bundlePath          { print(info.bundlePath ?? "") }
-        else if executablePath      { print(info.executablePath ?? "") }
-        else if version             { print(info.version ?? "") }
-        else if launchDate          { print(info.launchDate.map { ISO8601DateFormatter().string(from: $0) } ?? "") }
-        else if active              { print(info.active) }
-        else if hidden              { print(info.hidden) }
-        else if finishedLaunching   { print(info.finishedLaunching) }
-        else if ownsMenuBar         { print(info.ownsMenuBar) }
-        else if activationPolicy    { print(info.activationPolicy) }
-        else if architecture        { print(info.architecture) }
-        else                        { print(humanOutput(info)) }
+        let appInfo = try findAppInfo(startingFrom: fromPid)
+        print(output(appInfo))
+    }
+
+    private func output(_ appInfo: AppInfo) -> String {
+        if json              { return jsonOutput(appInfo) }
+        if name              { return appInfo.name ?? "" }
+        if bundleId          { return appInfo.bundleId ?? "" }
+        if pid               { return String(appInfo.pid) }
+        if bundlePath        { return appInfo.bundlePath ?? "" }
+        if executablePath    { return appInfo.executablePath ?? "" }
+        if version           { return appInfo.version ?? "" }
+        if launchDate        { return appInfo.launchDate.map { ISO8601DateFormatter().string(from: $0) } ?? "" }
+        if active            { return String(appInfo.active) }
+        if hidden            { return String(appInfo.hidden) }
+        if finishedLaunching { return String(appInfo.finishedLaunching) }
+        if ownsMenuBar       { return String(appInfo.ownsMenuBar) }
+        if activationPolicy  { return String(appInfo.activationPolicy) }
+        if architecture      { return String(appInfo.architecture) }
+        return humanOutput(appInfo)
     }
 }
 
