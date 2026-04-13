@@ -12,6 +12,7 @@ public struct AppInfo: Equatable, Codable {
     public let version: String?
     public let buildVersion: String?
     public let launchDate: Date?
+    public let launchUnixTime: Double?
     public let active: Bool
     public let hidden: Bool
     public let finishedLaunching: Bool

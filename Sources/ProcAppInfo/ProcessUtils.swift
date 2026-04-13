@@ -73,6 +73,7 @@ func makeAppInfo(pid: pid_t) -> AppInfo? {
         version: version,
         buildVersion: buildVersion,
         launchDate: app.launchDate,
+        launchUnixTime: app.launchDate?.timeIntervalSince1970,
         active: app.isActive,
         hidden: app.isHidden,
         finishedLaunching: app.isFinishedLaunching,

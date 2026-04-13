@@ -14,7 +14,8 @@ Executable Path:      /System/Applications/Utilities/Terminal.app/Contents/MacOS
 Version:              2.15
 Build Version:        470
 Architecture:         16777228
-Launch Date:          2026-04-12T01:34:41Z
+Launch Date:          2026-04-13T09:24:41+0900
+Launch Unix Time:     1776039881.557612
 Active:               true
 Hidden:               false
 Finished Launching:   true
@@ -61,6 +62,7 @@ proc-appinfo --build-version
 proc-appinfo --bundle-path
 proc-appinfo --executable-path
 proc-appinfo --launch-date
+proc-appinfo --launch-unix-time
 proc-appinfo --active
 proc-appinfo --hidden
 proc-appinfo --finished-launching

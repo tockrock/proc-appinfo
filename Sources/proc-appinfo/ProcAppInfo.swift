@@ -22,7 +22,8 @@ struct AppInfoCLI: ParsableCommand {
     @Flag(help: "Print the executable path.") var executablePath: Bool = false
     @Flag(help: "Print the version.") var version: Bool = false
     @Flag(help: "Print the build version (CFBundleVersion).") var buildVersion: Bool = false
-    @Flag(help: "Print the launch date (ISO 8601).") var launchDate: Bool = false
+    @Flag(help: "Print the launch date (ISO 8601, local timezone).") var launchDate: Bool = false
+    @Flag(help: "Print the launch date as Unix time (seconds since epoch).") var launchUnixTime: Bool = false
     @Flag(help: "Print whether the app is active.") var active: Bool = false
     @Flag(help: "Print whether the app is hidden.") var hidden: Bool = false
     @Flag(help: "Print whether the app has finished launching.") var finishedLaunching: Bool = false
@@ -34,7 +35,7 @@ struct AppInfoCLI: ParsableCommand {
 
     private var selectedFields: [Bool] {
         [bundleName, bundleDisplayName, localizedName, bundleId, pid, bundlePath, executablePath, version, buildVersion,
-         launchDate, active, hidden, finishedLaunching, ownsMenuBar, activationPolicy, architecture]
+         launchDate, launchUnixTime, active, hidden, finishedLaunching, ownsMenuBar, activationPolicy, architecture]
     }
 
     mutating func validate() throws {
@@ -63,7 +64,8 @@ struct AppInfoCLI: ParsableCommand {
         if executablePath    { return appInfo.executablePath ?? "" }
         if version           { return appInfo.version ?? "" }
         if buildVersion      { return appInfo.buildVersion ?? "" }
-        if launchDate        { return appInfo.launchDate.map { ISO8601DateFormatter().string(from: $0) } ?? "" }
+        if launchDate        { return appInfo.launchDate?.formatted(.localTime) ?? "" }
+        if launchUnixTime    { return appInfo.launchUnixTime.map { String($0) } ?? "" }
         if active            { return String(appInfo.active) }
         if hidden            { return String(appInfo.hidden) }
         if finishedLaunching { return String(appInfo.finishedLaunching) }
@@ -88,7 +90,8 @@ private func humanOutput(_ info: AppInfo) -> String {
     lines.append(("Version:", info.version ?? ""))
     lines.append(("Build Version:", info.buildVersion ?? ""))
     lines.append(("Architecture:", String(info.architecture)))
-    lines.append(("Launch Date:", info.launchDate.map { ISO8601DateFormatter().string(from: $0) } ?? ""))
+    lines.append(("Launch Date:", info.launchDate?.formatted(.localTime) ?? ""))
+    lines.append(("Launch Unix Time:", info.launchUnixTime.map { String($0) } ?? ""))
     lines.append(("Active:", String(info.active)))
     lines.append(("Hidden:", String(info.hidden)))
     lines.append(("Finished Launching:", String(info.finishedLaunching)))
@@ -107,4 +110,10 @@ private func jsonOutput(_ info: AppInfo) -> String {
     encoder.dateEncodingStrategy = .iso8601
     let data = try! encoder.encode(info)
     return String(data: data, encoding: .utf8)!
+}
+
+// MARK: - Extensions
+
+private extension FormatStyle where Self == Date.ISO8601FormatStyle {
+    static var localTime: Self { Date.ISO8601FormatStyle(timeZone: .current) }
 }
