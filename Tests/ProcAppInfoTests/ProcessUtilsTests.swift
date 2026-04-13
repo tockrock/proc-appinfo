@@ -5,7 +5,9 @@ import Darwin
 // Minimal AppInfo stub for testing — only bundleId needs to be meaningful.
 private func stubApp(bundleId: String, pid: pid_t = 100) -> AppInfo {
     AppInfo(
-        name: nil,
+        bundleName: nil,
+        bundleDisplayName: nil,
+        localizedName: nil,
         bundleId: bundleId,
         pid: pid,
         bundlePath: nil,
