@@ -13,27 +13,65 @@ struct AppInfoCLI: ParsableCommand {
     var fromPid: Int32?
 
     // Single-field selection flags (sw_vers style — mutually exclusive)
-    @Flag(help: "Print the bundle name (CFBundleName).") var bundleName: Bool = false
-    @Flag(help: "Print the bundle display name (CFBundleDisplayName).") var bundleDisplayName: Bool = false
-    @Flag(help: "Print the localized app name.") var localizedName: Bool = false
-    @Flag(help: "Print the bundle identifier.") var bundleId: Bool = false
-    @Flag(help: "Print the process ID.") var pid: Bool = false
-    @Flag(help: "Print the bundle path.") var bundlePath: Bool = false
-    @Flag(help: "Print the executable path.") var executablePath: Bool = false
-    @Flag(help: "Print the version.") var version: Bool = false
-    @Flag(help: "Print the build version (CFBundleVersion).") var buildVersion: Bool = false
-    @Flag(help: "Print the launch date (ISO 8601, local timezone).") var launchDate: Bool = false
-    @Flag(help: "Print the launch date as Unix time (seconds since epoch).") var launchUnixTime: Bool = false
-    @Flag(help: "Print whether the app is active.") var active: Bool = false
-    @Flag(help: "Print whether the app is hidden.") var hidden: Bool = false
-    @Flag(help: "Print whether the app has finished launching.") var finishedLaunching: Bool = false
-    @Flag(help: "Print whether the app owns the menu bar.") var ownsMenuBar: Bool = false
-    @Flag(help: "Print the activation policy.") var activationPolicy: Bool = false
-    @Flag(help: "Print the activation policy as a human-readable string.") var activationPolicyName: Bool = false
-    @Flag(help: "Print the executable architecture.") var architecture: Bool = false
-    @Flag(help: "Print the executable architecture as a human-readable string.") var architectureName: Bool = false
+    @Flag(help: "Print the bundle name (CFBundleName).")
+    var bundleName: Bool = false
 
-    @Flag(help: "Output all fields as a JSON object.") var json: Bool = false
+    @Flag(help: "Print the bundle display name (CFBundleDisplayName).")
+    var bundleDisplayName: Bool = false
+
+    @Flag(help: "Print the localized app name.")
+    var localizedName: Bool = false
+
+    @Flag(help: "Print the bundle identifier.")
+    var bundleId: Bool = false
+
+    @Flag(help: "Print the process ID.")
+    var pid: Bool = false
+
+    @Flag(help: "Print the bundle path.")
+    var bundlePath: Bool = false
+
+    @Flag(help: "Print the executable path.")
+    var executablePath: Bool = false
+
+    @Flag(help: "Print the version.")
+    var version: Bool = false
+
+    @Flag(help: "Print the build version (CFBundleVersion).")
+    var buildVersion: Bool = false
+
+    @Flag(help: "Print the launch date (ISO 8601, local timezone).")
+    var launchDate: Bool = false
+
+    @Flag(help: "Print the launch date as Unix time (seconds since epoch).")
+    var launchUnixTime: Bool = false
+
+    @Flag(help: "Print whether the app is active.")
+    var active: Bool = false
+
+    @Flag(help: "Print whether the app is hidden.")
+    var hidden: Bool = false
+
+    @Flag(help: "Print whether the app has finished launching.")
+    var finishedLaunching: Bool = false
+
+    @Flag(help: "Print whether the app owns the menu bar.")
+    var ownsMenuBar: Bool = false
+
+    @Flag(help: "Print the activation policy.")
+    var activationPolicy: Bool = false
+
+    @Flag(help: "Print the activation policy as a human-readable string.")
+    var activationPolicyName: Bool = false
+
+    @Flag(help: "Print the executable architecture.")
+    var architecture: Bool = false
+
+    @Flag(help: "Print the executable architecture as a human-readable string.")
+    var architectureName: Bool = false
+
+    @Flag(help: "Output all fields as a JSON object.")
+    var json: Bool = false
 
     private var selectedFields: [Bool] {
         [bundleName, bundleDisplayName, localizedName, bundleId, pid, bundlePath, executablePath, version, buildVersion,
