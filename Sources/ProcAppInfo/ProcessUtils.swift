@@ -79,6 +79,8 @@ func makeAppInfo(pid: pid_t) -> AppInfo? {
         finishedLaunching: app.isFinishedLaunching,
         ownsMenuBar: app.ownsMenuBar,
         activationPolicy: app.activationPolicy.rawValue,
-        architecture: app.executableArchitecture
+        activationPolicyName: AppInfo.activationPolicyName(app.activationPolicy.rawValue),
+        architecture: app.executableArchitecture,
+        architectureName: AppInfo.architectureName(app.executableArchitecture)
     )
 }

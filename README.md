@@ -4,23 +4,25 @@ A macOS CLI tool that returns information about the first ancestor macOS app in 
 
 ```
 $ proc-appinfo
-Bundle Name:          Terminal
-Bundle Display Name:  Terminal
-Localized Name:       ターミナル
-Bundle ID:            com.apple.Terminal
-PID:                  812
-Bundle Path:          /System/Applications/Utilities/Terminal.app
-Executable Path:      /System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
-Version:              2.15
-Build Version:        470
-Architecture:         16777228
-Launch Date:          2026-04-13T09:24:41+0900
-Launch Unix Time:     1776039881.557612
-Active:               true
-Hidden:               false
-Finished Launching:   true
-Owns Menu Bar:        true
-Activation Policy:    0
+Bundle Name:            Terminal
+Bundle Display Name:    Terminal
+Localized Name:         ターミナル
+Bundle ID:              com.apple.Terminal
+PID:                    812
+Bundle Path:            /System/Applications/Utilities/Terminal.app
+Executable Path:        /System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
+Version:                2.15
+Build Version:          470
+Architecture:           16777228
+Architecture Name:      arm64
+Launch Date:            2026-04-13T09:24:41+0900
+Launch Unix Time:       1776039881.557612
+Active:                 true
+Hidden:                 false
+Finished Launching:     true
+Owns Menu Bar:          true
+Activation Policy:      0
+Activation Policy Name: regular
 ```
 
 ## How it works
@@ -68,7 +70,9 @@ proc-appinfo --hidden
 proc-appinfo --finished-launching
 proc-appinfo --owns-menu-bar
 proc-appinfo --activation-policy
+proc-appinfo --activation-policy-name
 proc-appinfo --architecture
+proc-appinfo --architecture-name
 
 # All fields as JSON
 proc-appinfo --json

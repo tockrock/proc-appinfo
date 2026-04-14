@@ -29,13 +29,16 @@ struct AppInfoCLI: ParsableCommand {
     @Flag(help: "Print whether the app has finished launching.") var finishedLaunching: Bool = false
     @Flag(help: "Print whether the app owns the menu bar.") var ownsMenuBar: Bool = false
     @Flag(help: "Print the activation policy.") var activationPolicy: Bool = false
+    @Flag(help: "Print the activation policy as a human-readable string.") var activationPolicyName: Bool = false
     @Flag(help: "Print the executable architecture.") var architecture: Bool = false
+    @Flag(help: "Print the executable architecture as a human-readable string.") var architectureName: Bool = false
 
     @Flag(help: "Output all fields as a JSON object.") var json: Bool = false
 
     private var selectedFields: [Bool] {
         [bundleName, bundleDisplayName, localizedName, bundleId, pid, bundlePath, executablePath, version, buildVersion,
-         launchDate, launchUnixTime, active, hidden, finishedLaunching, ownsMenuBar, activationPolicy, architecture]
+         launchDate, launchUnixTime, active, hidden, finishedLaunching, ownsMenuBar,
+         activationPolicy, activationPolicyName, architecture, architectureName]
     }
 
     mutating func validate() throws {
@@ -54,24 +57,26 @@ struct AppInfoCLI: ParsableCommand {
     }
 
     private func output(_ appInfo: AppInfo) -> String {
-        if json              { return jsonOutput(appInfo) }
-        if bundleName        { return appInfo.bundleName ?? "" }
-        if bundleDisplayName { return appInfo.bundleDisplayName ?? "" }
-        if localizedName     { return appInfo.localizedName ?? "" }
-        if bundleId          { return appInfo.bundleId ?? "" }
-        if pid               { return String(appInfo.pid) }
-        if bundlePath        { return appInfo.bundlePath ?? "" }
-        if executablePath    { return appInfo.executablePath ?? "" }
-        if version           { return appInfo.version ?? "" }
-        if buildVersion      { return appInfo.buildVersion ?? "" }
-        if launchDate        { return appInfo.launchDate?.formatted(.localTime) ?? "" }
-        if launchUnixTime    { return appInfo.launchUnixTime.map { String($0) } ?? "" }
-        if active            { return String(appInfo.active) }
-        if hidden            { return String(appInfo.hidden) }
-        if finishedLaunching { return String(appInfo.finishedLaunching) }
-        if ownsMenuBar       { return String(appInfo.ownsMenuBar) }
-        if activationPolicy  { return String(appInfo.activationPolicy) }
-        if architecture      { return String(appInfo.architecture) }
+        if json                 { return jsonOutput(appInfo) }
+        if bundleName           { return appInfo.bundleName ?? "" }
+        if bundleDisplayName    { return appInfo.bundleDisplayName ?? "" }
+        if localizedName        { return appInfo.localizedName ?? "" }
+        if bundleId             { return appInfo.bundleId ?? "" }
+        if pid                  { return String(appInfo.pid) }
+        if bundlePath           { return appInfo.bundlePath ?? "" }
+        if executablePath       { return appInfo.executablePath ?? "" }
+        if version              { return appInfo.version ?? "" }
+        if buildVersion         { return appInfo.buildVersion ?? "" }
+        if launchDate           { return appInfo.launchDate?.formatted(.localTime) ?? "" }
+        if launchUnixTime       { return appInfo.launchUnixTime.map { String($0) } ?? "" }
+        if active               { return String(appInfo.active) }
+        if hidden               { return String(appInfo.hidden) }
+        if finishedLaunching    { return String(appInfo.finishedLaunching) }
+        if ownsMenuBar          { return String(appInfo.ownsMenuBar) }
+        if activationPolicy     { return String(appInfo.activationPolicy) }
+        if activationPolicyName { return appInfo.activationPolicyName }
+        if architecture         { return String(appInfo.architecture) }
+        if architectureName     { return appInfo.architectureName }
         return humanOutput(appInfo)
     }
 }
@@ -90,6 +95,7 @@ private func humanOutput(_ info: AppInfo) -> String {
     lines.append(("Version:", info.version ?? ""))
     lines.append(("Build Version:", info.buildVersion ?? ""))
     lines.append(("Architecture:", String(info.architecture)))
+    lines.append(("Architecture Name:", info.architectureName))
     lines.append(("Launch Date:", info.launchDate?.formatted(.localTime) ?? ""))
     lines.append(("Launch Unix Time:", info.launchUnixTime.map { String($0) } ?? ""))
     lines.append(("Active:", String(info.active)))
@@ -97,6 +103,7 @@ private func humanOutput(_ info: AppInfo) -> String {
     lines.append(("Finished Launching:", String(info.finishedLaunching)))
     lines.append(("Owns Menu Bar:", String(info.ownsMenuBar)))
     lines.append(("Activation Policy:", String(info.activationPolicy)))
+    lines.append(("Activation Policy Name:", info.activationPolicyName))
 
     let maxLen = lines.map { $0.0.count }.max() ?? 0
     return lines.map { label, value in
