@@ -25,20 +25,32 @@ struct AppInfoCLI: ParsableCommand {
     @Flag(help: "Print the bundle identifier.")
     var bundleId: Bool = false
 
+    @Flag(help: "Print the version.")
+    var version: Bool = false
+
+    @Flag(help: "Print the build version (CFBundleVersion).")
+    var buildVersion: Bool = false
+
     @Flag(help: "Print the process ID.")
     var pid: Bool = false
+
+    @Flag(help: "Print the executable architecture.")
+    var architecture: Bool = false
+
+    @Flag(help: "Print the executable architecture as a human-readable string.")
+    var architectureName: Bool = false
+
+    @Flag(help: "Print the activation policy.")
+    var activationPolicy: Bool = false
+
+    @Flag(help: "Print the activation policy as a human-readable string.")
+    var activationPolicyName: Bool = false
 
     @Flag(help: "Print the bundle path.")
     var bundlePath: Bool = false
 
     @Flag(help: "Print the executable path.")
     var executablePath: Bool = false
-
-    @Flag(help: "Print the version.")
-    var version: Bool = false
-
-    @Flag(help: "Print the build version (CFBundleVersion).")
-    var buildVersion: Bool = false
 
     @Flag(help: "Print the launch date (ISO 8601, local timezone).")
     var launchDate: Bool = false
@@ -58,25 +70,15 @@ struct AppInfoCLI: ParsableCommand {
     @Flag(help: "Print whether the app owns the menu bar.")
     var ownsMenuBar: Bool = false
 
-    @Flag(help: "Print the activation policy.")
-    var activationPolicy: Bool = false
-
-    @Flag(help: "Print the activation policy as a human-readable string.")
-    var activationPolicyName: Bool = false
-
-    @Flag(help: "Print the executable architecture.")
-    var architecture: Bool = false
-
-    @Flag(help: "Print the executable architecture as a human-readable string.")
-    var architectureName: Bool = false
-
     @Flag(help: "Output all fields as a JSON object.")
     var json: Bool = false
 
     private var selectedFields: [Bool] {
-        [bundleName, bundleDisplayName, localizedName, bundleId, pid, bundlePath, executablePath, version, buildVersion,
-         launchDate, launchUnixTime, active, hidden, finishedLaunching, ownsMenuBar,
-         activationPolicy, activationPolicyName, architecture, architectureName]
+        [bundleName, bundleDisplayName, localizedName, bundleId,
+         version, buildVersion,
+         pid, architecture, architectureName, activationPolicy, activationPolicyName,
+         bundlePath, executablePath,
+         launchDate, launchUnixTime, active, hidden, finishedLaunching, ownsMenuBar]
     }
 
     mutating func validate() throws {
@@ -100,21 +102,21 @@ struct AppInfoCLI: ParsableCommand {
         if bundleDisplayName    { return appInfo.bundleDisplayName ?? "" }
         if localizedName        { return appInfo.localizedName ?? "" }
         if bundleId             { return appInfo.bundleId ?? "" }
-        if pid                  { return String(appInfo.pid) }
-        if bundlePath           { return appInfo.bundlePath ?? "" }
-        if executablePath       { return appInfo.executablePath ?? "" }
         if version              { return appInfo.version ?? "" }
         if buildVersion         { return appInfo.buildVersion ?? "" }
+        if pid                  { return String(appInfo.pid) }
+        if architecture         { return String(appInfo.architecture) }
+        if architectureName     { return appInfo.architectureName }
+        if activationPolicy     { return String(appInfo.activationPolicy) }
+        if activationPolicyName { return appInfo.activationPolicyName }
+        if bundlePath           { return appInfo.bundlePath ?? "" }
+        if executablePath       { return appInfo.executablePath ?? "" }
         if launchDate           { return appInfo.launchDate?.formatted(.localTime) ?? "" }
         if launchUnixTime       { return appInfo.launchUnixTime.map { String($0) } ?? "" }
         if active               { return String(appInfo.active) }
         if hidden               { return String(appInfo.hidden) }
         if finishedLaunching    { return String(appInfo.finishedLaunching) }
         if ownsMenuBar          { return String(appInfo.ownsMenuBar) }
-        if activationPolicy     { return String(appInfo.activationPolicy) }
-        if activationPolicyName { return appInfo.activationPolicyName }
-        if architecture         { return String(appInfo.architecture) }
-        if architectureName     { return appInfo.architectureName }
         return humanOutput(appInfo)
     }
 }
@@ -127,21 +129,21 @@ private func humanOutput(_ info: AppInfo) -> String {
     lines.append(("Bundle Display Name:", info.bundleDisplayName ?? ""))
     lines.append(("Localized Name:", info.localizedName ?? ""))
     lines.append(("Bundle ID:", info.bundleId ?? ""))
-    lines.append(("PID:", String(info.pid)))
-    lines.append(("Bundle Path:", info.bundlePath ?? ""))
-    lines.append(("Executable Path:", info.executablePath ?? ""))
     lines.append(("Version:", info.version ?? ""))
     lines.append(("Build Version:", info.buildVersion ?? ""))
+    lines.append(("PID:", String(info.pid)))
     lines.append(("Architecture:", String(info.architecture)))
     lines.append(("Architecture Name:", info.architectureName))
+    lines.append(("Activation Policy:", String(info.activationPolicy)))
+    lines.append(("Activation Policy Name:", info.activationPolicyName))
+    lines.append(("Bundle Path:", info.bundlePath ?? ""))
+    lines.append(("Executable Path:", info.executablePath ?? ""))
     lines.append(("Launch Date:", info.launchDate?.formatted(.localTime) ?? ""))
     lines.append(("Launch Unix Time:", info.launchUnixTime.map { String($0) } ?? ""))
     lines.append(("Active:", String(info.active)))
     lines.append(("Hidden:", String(info.hidden)))
     lines.append(("Finished Launching:", String(info.finishedLaunching)))
     lines.append(("Owns Menu Bar:", String(info.ownsMenuBar)))
-    lines.append(("Activation Policy:", String(info.activationPolicy)))
-    lines.append(("Activation Policy Name:", info.activationPolicyName))
 
     let maxLen = lines.map { $0.0.count }.max() ?? 0
     return lines.map { label, value in
@@ -151,7 +153,7 @@ private func humanOutput(_ info: AppInfo) -> String {
 
 private func jsonOutput(_ info: AppInfo) -> String {
     let encoder = JSONEncoder()
-    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    encoder.outputFormatting = .prettyPrinted
     encoder.dateEncodingStrategy = .iso8601
     let data = try! encoder.encode(info)
     return String(data: data, encoding: .utf8)!

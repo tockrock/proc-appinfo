@@ -67,20 +67,20 @@ func makeAppInfo(pid: pid_t) -> AppInfo? {
         bundleDisplayName: bundleDisplayName,
         localizedName: app.localizedName,
         bundleId: app.bundleIdentifier,
-        pid: pid,
-        bundlePath: bundleURL?.path,
-        executablePath: app.executableURL?.path,
         version: version,
         buildVersion: buildVersion,
+        pid: pid,
+        architecture: app.executableArchitecture,
+        architectureName: AppInfo.architectureName(app.executableArchitecture),
+        activationPolicy: app.activationPolicy.rawValue,
+        activationPolicyName: AppInfo.activationPolicyName(app.activationPolicy.rawValue),
+        bundlePath: bundleURL?.path,
+        executablePath: app.executableURL?.path,
         launchDate: app.launchDate,
         launchUnixTime: app.launchDate?.timeIntervalSince1970,
         active: app.isActive,
         hidden: app.isHidden,
         finishedLaunching: app.isFinishedLaunching,
-        ownsMenuBar: app.ownsMenuBar,
-        activationPolicy: app.activationPolicy.rawValue,
-        activationPolicyName: AppInfo.activationPolicyName(app.activationPolicy.rawValue),
-        architecture: app.executableArchitecture,
-        architectureName: AppInfo.architectureName(app.executableArchitecture)
+        ownsMenuBar: app.ownsMenuBar
     )
 }
