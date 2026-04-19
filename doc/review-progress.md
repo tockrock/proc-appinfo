@@ -5,14 +5,14 @@
 | # | Perspective | Status |
 |---|-------------|--------|
 | 1 | Field ordering consistency | Done |
-| 2 | Force unwraps in `jsonOutput` | Skipped (revisit later) |
-| 3 | Nil vs empty string in single-field mode | Todo |
-| 4 | Redundant derived fields in `AppInfo` | Todo |
-| 5 | `--from-pid` validation | Todo |
-| 6 | Test coverage | Todo |
-| 7 | Feature completeness | Todo |
-| 8 | Swift conventions | Todo |
-| 9 | Human readability | Todo |
+| 2 | Force unwraps in `jsonOutput` | Done |
+| 3 | Nil vs empty string in single-field mode | Done |
+| 4 | Redundant derived fields in `AppInfo` | Done |
+| 5 | `--from-pid` validation | Done |
+| 6 | Test coverage | Done |
+| 7 | Feature completeness | Done |
+| 8 | Swift conventions | Done |
+| 9 | Human readability | Done |
 
 ---
 
@@ -51,8 +51,6 @@ Changed files:
 
 ---
 
-## Skipped (revisit later)
-
 ### Perspective 2: Force unwraps in `jsonOutput`
 
 ```swift
@@ -64,11 +62,7 @@ Both force unwraps are safe — `AppInfo` only contains standard `Codable` types
 - `try?` + fallback produces silent empty output on failure (worse than a crash)
 - `try!` crashes loudly on violated invariant (honest)
 - Making the call chain `throws` adds complexity for an error that can't occur
-- Left as-is for now pending decision on whether any change is warranted
-
----
-
-## Todo
+- Left as-is: current state is intentional and acceptable.
 
 ### Perspective 3: Nil vs empty string in single-field mode
 
