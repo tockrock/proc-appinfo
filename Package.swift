@@ -1,26 +1,26 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.1
 import PackageDescription
 
 let package = Package(
-    name: "terminal-bundleid",
+    name: "proc-appinfo",
     platforms: [.macOS(.v13)],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
     ],
     targets: [
         .target(
-            name: "TerminalBundleID"
+            name: "ProcAppInfo"
         ),
         .executableTarget(
-            name: "terminal-bundleid",
+            name: "proc-appinfo",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                "TerminalBundleID",
+                "ProcAppInfo",
             ]
         ),
         .testTarget(
-            name: "TerminalBundleIDTests",
-            dependencies: ["TerminalBundleID"]
+            name: "ProcAppInfoTests",
+            dependencies: ["ProcAppInfo"]
         ),
     ]
 )
