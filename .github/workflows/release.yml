@@ -19,11 +19,11 @@ jobs:
 
       - name: Package
         run: |
-          tar -czf terminal-bundleid.tar.gz \
+          tar -czf proc-appinfo.tar.gz \
             -C .build/apple/Products/Release \
-            terminal-bundleid
+            proc-appinfo
 
       - name: Create GitHub Release
-        run: gh release create "$GITHUB_REF_NAME" terminal-bundleid.tar.gz --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" proc-appinfo.tar.gz --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
