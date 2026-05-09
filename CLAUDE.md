@@ -12,7 +12,7 @@ swift build
 swift build -c release
 
 # Run
-swift run terminal-bundleid
+swift run proc-appinfo
 
 # Test (no tests currently exist)
 swift test
@@ -25,11 +25,12 @@ swift test
 
 ## Architecture
 
-`terminal-bundleid` is a single-target Swift Package (macOS 13+) CLI tool with two source files:
+`proc-appinfo` is a Swift Package (macOS 13+) CLI tool with three source files:
 
-- **`TerminalBundleID.swift`** — Entry point. Uses `swift-argument-parser` (`ParsableCommand`) to define the CLI. Calls `findTerminalBundleID()` and prints the result.
-- **`ProcessUtils.swift`** — Core logic. Walks the process ancestry tree via `sysctl` (`KERN_PROC_PID`) to get parent PIDs, then checks each ancestor against `NSRunningApplication` to find the first registered app bundle.
+- **`Sources/proc-appinfo/ProcAppInfo.swift`** — Entry point. Uses `swift-argument-parser` (`ParsableCommand`) to define the CLI and output formatting.
+- **`Sources/ProcAppInfo/AppInfo.swift`** — `AppInfo` struct with all fields returned by the tool.
+- **`Sources/ProcAppInfo/ProcessUtils.swift`** — Core logic. Walks the process ancestry tree via `sysctl` (`KERN_PROC_PID`) to get parent PIDs, then checks each ancestor against `NSRunningApplication` to find the first registered app bundle.
 
-The tool exits with a non-zero code if no terminal app bundle is found (`CLIError.terminalNotFound`).
+The tool exits with a non-zero code if no ancestor app bundle is found.
 
 **Key constraint:** Must run as a macOS app-context process (not sandboxed) because it uses `NSRunningApplication` from AppKit, which requires access to the window server / running applications list.

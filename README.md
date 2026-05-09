@@ -41,8 +41,8 @@ brew install tockrock/tap/proc-appinfo
 ### Build from source
 
 ```bash
-git clone https://github.com/tockrock/terminal-bundleid
-cd terminal-bundleid
+git clone https://github.com/tockrock/proc-appinfo
+cd proc-appinfo
 swift build -c release
 cp .build/release/proc-appinfo /usr/local/bin/
 ```
